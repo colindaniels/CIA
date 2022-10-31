@@ -1,0 +1,76 @@
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
+library(naniar)
+library(forcats)
+library(wordcloud)
+library(tm)
+library(SnowballC)
+library(RColorBrewer)
+library(tidytext)
+```
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(openintro)
+library(gridExtra)
+```
+```{r}
+library("tmap")
+library("tmaptools")
+library("sf")
+library("leaflet")
+```
+
+```{r}
+library("readxl")
+
+chicago_crime = read.csv("chicago_crime.csv")
+head(chicago_crime)
+```
+
+```{r}
+ChicagoCrime <- chicago_crime %>% select(Date, Primary.Type, Arrest, 
+                                           Domestic, District)
+ChicagoCrime = ChicagoCrime %>% separate(Date,c("month", "data", "year"), sep = "/")
+
+ChicagoCrime = ChicagoCrime %>% separate(year,c("year", "time"), sep = " ")
+```
+
+```{r}
+ChicagoTheft <- ChicagoCrime %>% 
+  filter(Primary.Type %in% c("THEFT"))
+
+head(ChicagoTheft)
+```
+
+```{r}
+ChicagoAssault <- ChicagoCrime %>% 
+  filter(Primary.Type %in% c("ASSAULT"))
+
+head(ChicagoAssault)
+```
+
+```{r}
+ChicagoAHT <- ChicagoCrime %>%
+  filter(Primary.Type %in% c("ASSAULT", "HOMICIDE", "THEFT"))
+
+head(ChicagoAHT)
+```
+
+
+```{r}
+ggplot(data = ChicagoAHT, mapping = aes(x = month, 
+                                         fill = Primary.Type)) +
+    geom_bar(position = "dodge") +
+  ggtitle("Frequency of Assault, Homicide, and Theft By Month") + 
+  xlab("Month") + 
+  ylab("Frequency") 
+```
+
+
