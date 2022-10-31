@@ -21,10 +21,13 @@ df = pd.DataFrame({
     'Min Temp': data['min_temp'],
     'Max Wind Speed': data['max_wind_spd'],
     'Precipitation': data['precip']
-
 })
 
 
 assult_df = df.loc[df['Primary Type'] == 'ASSAULT']
 
+print(assult_df)
 
+# assult_df.to_csv('assult.csv')
+
+assult_df.to_json('assult.json', orient='records')
