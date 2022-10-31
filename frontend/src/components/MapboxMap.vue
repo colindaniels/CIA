@@ -73,11 +73,7 @@ export default {
             map.addLayer({
                 'id': 'places',
                 'type': 'symbol',
-                'source': 'places',
-                'layout': {
-                    'icon-image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAX-6lgj3uY4ItnfDjZteAPUcvIKeN4pHdVvneC50nyg&s',
-                    'icon-allow-overlap': true
-                }
+                'source': 'places'
             });
 
         })
