@@ -31,7 +31,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import axios from 'axios';
 var data = null;
 axios({
-    url: 'https://raw.githubusercontent.com/colindaniels/CIA/main/assults.geojson',
+    url: 'https://raw.githubusercontent.com/colindaniels/CIA/main/assaults.geojson',
     method: 'GET',
     headers: {
         'Accept': 'application/json',
@@ -72,8 +72,32 @@ export default {
 
             map.addLayer({
                 'id': 'places',
-                'type': 'symbol',
-                'source': 'places'
+                'type': 'circle',
+                'source': 'places',
+                'paint': {
+                    // Make circles larger as the user zooms from z12 to z22.
+                    'circle-radius': {
+                        'base': 1.75,
+                        'stops': [
+                            [12, 2],
+                            [22, 180]
+                        ]
+                    },
+                    // Color circles by ethnicity, using a `match` expression.
+                    'circle-color': [
+                        'match',
+                        ['get', 'ethnicity'],
+                        'White',
+                        '#fbb03b',
+                        'Black',
+                        '#223b53',
+                        'Hispanic',
+                        '#e55e5e',
+                        'Asian',
+                        '#3bb2d0',
+                        /* other */ '#ccc'
+                    ]
+                }
             });
 
         })
