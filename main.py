@@ -58,8 +58,9 @@ with open('assault.csv', newline='') as file:
 
 
 
-with open('assult.geojson', 'w+') as file:
+with open('assults.geojson', 'w+') as file:
     json.dump(geojson, file)
+    
 
 
 
