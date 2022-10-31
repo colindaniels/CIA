@@ -46,9 +46,7 @@ with open('assault.csv', newline='') as file:
     for row in reader:
         geojson['features'].append({
             'type': 'Feature',
-            'properties': {
-                'date': row['Date']
-            },
+            'properties': row,
             'geometry': {
                 'type': 'Point',
                 'coordinates': [float(row['Longitude']), float(row['Latitude'])]
