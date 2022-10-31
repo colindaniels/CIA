@@ -39,7 +39,7 @@ axios({
     }
 }).then((res) => {
     if (res.status == 200 && res.data) {
-        console.log(JSON.parse(res.data))
+        data = res.data
     }
 })
 
@@ -75,7 +75,7 @@ export default {
                 'type': 'symbol',
                 'source': 'places',
                 'layout': {
-                    'icon-image': '{icon}',
+                    'icon-image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAX-6lgj3uY4ItnfDjZteAPUcvIKeN4pHdVvneC50nyg&s',
                     'icon-allow-overlap': true
                 }
             });

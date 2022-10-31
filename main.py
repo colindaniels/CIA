@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib
-from geojson import Feature, FeatureCollection, Point
 import json
+import csv
 
 filename = "combined.csv"
 
@@ -30,24 +30,37 @@ assult_df = df.loc[df['Primary Type'] == 'ASSAULT']
 
 # remove no location data rows
 assult_df = assult_df[assult_df['Longitude'].notna()]
-print(assult_df.count())
+#print(assult_df.count())
 
-assult_df.to_csv('assult.csv')
+assult_df.to_csv('assault.csv')
 
 # to geojson for map
 
-features = assult_df.apply(
-    lambda row: Feature(geometry=Point((float(row['Longitude']), float(row['Latitude'])))),
-    axis=1
-).tolist()
+geojson = {
+    'type': 'FeatureCollection',
+    'features': []
+}
+
+with open('assault.csv', newline='') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        geojson['features'].append({
+            'type': 'Feature',
+            'properties': {
+                'Date': row['Date']
+            },
+            'goemetry': {
+                'type': 'Point',
+                'coordinates': [row['Longitude'], row['Longitude']]
+            }
+
+        })
 
 
-properties = assult_df.drop(['Latitude', 'Longitude'], axis=1).to_dict('records')
 
-feature_collection = FeatureCollection(features=features, properties=properties)
+with open('assult.geojson', 'w+') as file:
+    json.dump(geojson, file)
 
-with open('assults.geojson', 'w', encoding='utf-8') as f:
-    json.dump(feature_collection, f, ensure_ascii=False)
 
 
 #assult_df.to_json('assult.json', orient='records')
