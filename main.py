@@ -51,16 +51,16 @@ with open('assault.csv', newline='') as file:
             },
             'goemetry': {
                 'type': 'Point',
-                'coordinates': [row['Longitude'], row['Longitude']]
+                'coordinates': [row['Longitude'], row['Latitude']]
             }
 
         })
 
 
 
-with open('assults.geojson', 'w+') as file:
+with open('assaults.geojson', 'w+') as file:
     json.dump(geojson, file)
-    
+
 
 
 
