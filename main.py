@@ -28,8 +28,11 @@ df = pd.DataFrame({
 
 assult_df = df.loc[df['Primary Type'] == 'ASSAULT']
 
+# remove no location data rows
+assult_df = assult_df[assult_df['Longitude'].notna()]
+print(assult_df.count())
 
-# assult_df.to_csv('assult.csv')
+assult_df.to_csv('assult.csv')
 
 # to geojson for map
 
@@ -37,6 +40,7 @@ features = assult_df.apply(
     lambda row: Feature(geometry=Point((float(row['Longitude']), float(row['Latitude'])))),
     axis=1
 ).tolist()
+
 
 properties = assult_df.drop(['Latitude', 'Longitude'], axis=1).to_dict('records')
 

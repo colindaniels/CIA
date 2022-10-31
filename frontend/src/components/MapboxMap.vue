@@ -28,7 +28,25 @@
 <script>
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import axios from 'axios';
+var data = null;
+axios({
+    url: 'https://raw.githubusercontent.com/colindaniels/CIA/main/assults.geojson',
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+    }
+}).then((res) => {
+    if (res.status == 200 && res.data) {
+        console.log(JSON.parse(res.data))
+    }
+})
+
 import mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-gl');"
+
+
+
 
 export default {
     mounted() {
@@ -44,9 +62,30 @@ export default {
             map.setFog({}); // Set the default atmosphere style
         });
 
+        map.on('load', () => {
+            console.log(data)
+            map.addSource('places', {
+                'type': 'geojson',
+                'data': data
+
+            })
+
+            map.addLayer({
+                'id': 'places',
+                'type': 'symbol',
+                'source': 'places',
+                'layout': {
+                    'icon-image': '{icon}',
+                    'icon-allow-overlap': true
+                }
+            });
+
+        })
+
         // remove watermarks
         document.querySelector('.mapboxgl-ctrl-bottom-left').remove()
         document.querySelector('.mapboxgl-ctrl-bottom-right').remove()
+
 
     }
 }
@@ -93,6 +132,7 @@ export default {
 .map-key .k.assult {
     background-color: rgb(251, 172, 116);
 }
+
 .map-key .k.battery {
     background-color: rgb(203, 203, 0);
 }
@@ -100,6 +140,4 @@ export default {
 .map-key .k.petty {
     background-color: rgb(126, 214, 126);
 }
-
-
 </style>
