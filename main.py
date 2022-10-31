@@ -47,16 +47,14 @@ with open('assault.csv', newline='') as file:
         geojson['features'].append({
             'type': 'Feature',
             'properties': {
-                'Date': row['Date']
+                'date': row['Date']
             },
-            'goemetry': {
+            'geometry': {
                 'type': 'Point',
                 'coordinates': [float(row['Longitude']), float(row['Latitude'])]
             }
 
         })
-
-
 
 with open('assaults.geojson', 'w+') as file:
     json.dump(geojson, file)
