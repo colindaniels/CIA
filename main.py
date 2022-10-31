@@ -51,7 +51,7 @@ with open('assault.csv', newline='') as file:
             },
             'goemetry': {
                 'type': 'Point',
-                'coordinates': [row['Longitude'], row['Latitude']]
+                'coordinates': [float(row['Longitude']), float(row['Latitude'])]
             }
 
         })
