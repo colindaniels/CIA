@@ -58,13 +58,13 @@ with open('assault.csv', newline='') as file:
                 'Month': row['Month'],
                 'Block': row['Block'],
                 'Description': row['Description'],
-                'Location': row['Location Description'],
-                'Arrest?': row['Arrest'],
-                'Domestic?': row['Domestic'],
+                'Location Description': row['Location Description'],
+                'Arrest': row['Arrest'],
+                'Domestic': row['Domestic'],
                 'Clouds': row['Clouds'],
                 'Max Temp': float(row['Max Temp']),
                 'Min Temp': float(row['Min Temp']),
-                'Wind Speed': row['Max Wind Speed'],
+                'Max Wind Speed': row['Max Wind Speed'],
                 'Precipitation': row['Precipitation']
             },
             'geometry': {
