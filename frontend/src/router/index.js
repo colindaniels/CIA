@@ -8,15 +8,15 @@ import { createRouter, createWebHistory } from 'vue-router'
       name: 'Home',
       component: () => import('../views/home-view.vue'),
       meta: {
-        title: 'Home TITLE'
+        title: 'Home'
       }
     },
     {
-        path: '/test',
-        name: 'TEST',
-        component: () => import('../views/test-view.vue'),
+        path: '/slides',
+        name: 'slides',
+        component: () => import('../views/slides-view.vue'),
         meta: {
-          title: 'TEST'
+          title: 'Slides'
         }
       },
       {
@@ -24,7 +24,7 @@ import { createRouter, createWebHistory } from 'vue-router'
         name: 'map',
         component: () => import('../views/map-view.vue'),
         meta: {
-          title: 'map'
+          title: 'Crime Map'
         }
       }
     

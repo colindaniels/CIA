@@ -15,16 +15,18 @@ crime_csv = 'chicago_crime.csv'
 
 crime_df = pd.read_csv(crime_csv)
 
+print(crime_df.head())
+
 # include only date part of datetime
 crime_df['Date'] = crime_df['Date'].str.replace('/', '-').str.split(' ').str[0]
 
 # switch year to last index
 weather_df['Date'] = ['-'.join(map(str, e)) for e in weather_df['Date'].str.split('-').str[1:] + weather_df['Date'].str.split('-').str[:1]]
 
-
-
+# merge dfs
 combined_df = pd.merge(crime_df, weather_df, on='Date')
 
+# create month col
 combined_df['Month'] = combined_df['Date'].str.split('-').str[0]
 
 

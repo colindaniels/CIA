@@ -26,16 +26,16 @@ df = pd.DataFrame({
     'Precipitation': data['precip']
 })
 
-
+# only contain assult from primary type
 assult_df = df.loc[df['Primary Type'] == 'ASSAULT']
 
-# remove no location data rows
+# drop rows with no location data
 assult_df = assult_df[assult_df['Longitude'].notna()]
 
 # to float
 assult_df['Max Temp'] = assult_df['Max Temp']
 
-print(assult_df['Max Temp'])
+print(assult_df.head())
 
 #print(assult_df.count())
 
