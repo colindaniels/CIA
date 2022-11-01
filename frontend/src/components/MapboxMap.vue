@@ -70,7 +70,7 @@ export default {
     methods: {
         clickMonth(month) {
             this.selected = month
-            this.global_map.setFilter('crime', ['in', 'date', '01']);
+            this.global_map.setFilter('crime', ['==', 'Month', String(Number(month))]);
         }
     },
     data() {
