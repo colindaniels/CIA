@@ -109,8 +109,8 @@ export default {
         return {
             global_map: "",
             month: 'all',
-            min_value: 0,
-            max_value: 0
+            min_value: -20,
+            max_value: 45
         }
     },
 
