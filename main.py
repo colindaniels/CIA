@@ -10,6 +10,7 @@ data = pd.read_csv(filename)
 df = pd.DataFrame({
     'ID': data['ID'],
     'Date': data['Date'],
+    'Month': data['Month'],
     'Block': data['Block'],
     'Primary Type': data['Primary Type'],
     'Description': data['Description'],

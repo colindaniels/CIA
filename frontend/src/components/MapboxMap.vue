@@ -18,8 +18,26 @@
        
         </div>
         -->
-        <div id="map" class="map-container">
+        <div class="map-box">
+            <div id="map" class="map-container">
         </div>
+        <div class="month-selector">
+            <div @click="clickMonth('all')" :class="{ selected: selected == 'all' }">ALL</div>
+            <div @click="clickMonth('01')" :class="{ selected: selected == '01' }">Jan</div>
+            <div @click="clickMonth('02')" :class="{ selected: selected == '02' }">Feb</div>
+            <div @click="clickMonth('03')" :class="{ selected: selected == '03' }">Mar</div>
+            <div @click="clickMonth('04')" :class="{ selected: selected == '04' }">Apr</div>
+            <div @click="clickMonth('05')" :class="{ selected: selected == '05' }">May</div>
+            <div @click="clickMonth('06')" :class="{ selected: selected == '06' }">Jun</div>
+            <div @click="clickMonth('07')" :class="{ selected: selected == '07' }">Jul</div>
+            <div @click="clickMonth('08')" :class="{ selected: selected == '08' }">Aug</div>
+            <div @click="clickMonth('09')" :class="{ selected: selected == '09' }">Sep</div>
+            <div @click="clickMonth('10')" :class="{ selected: selected == '10' }">Oct</div>
+            <div @click="clickMonth('11')" :class="{ selected: selected == '11' }">Nov</div>
+            <div @click="clickMonth('12')" :class="{ selected: selected == '12' }">Dec</div>
+        </div>
+        </div>
+
 
     </div>
 </template>
@@ -49,152 +67,95 @@ import mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-gl');"
 
 
 export default {
+    methods: {
+        clickMonth(month) {
+            this.selected = month
+            this.global_map.setFilter('crime', ['in', 'date', '01']);
+        }
+    },
+    data() {
+        return {
+            global_map: "",
+            selected: '01'
+        }
+    },
     mounted() {
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWNvbW1ldCIsImEiOiJja3V0YXpmMzgwc3J1MnJueTNrazhhejEyIn0.KkudRz1R4_glQLTiEKtKeQ';
         const map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/streets-v11', // style URL
             center: [-87.623177, 41.881832], // starting position [lng, lat]
-            zoom: 9, // starting zoom
+            zoom: 11, // starting zoom
             projection: 'globe' // display the map as a 3D globe
         });
         map.on('style.load', () => {
             map.setFog({}); // Set the default atmosphere style
         });
+        this.global_map = map
 
         map.on('load', () => {
 
-            var test = {
-                'type': 'FeatureCollection',
-                'features': [
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>',
-                            'icon': 'theatre-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.038659, 38.931567]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Mad Men Season Five Finale Watch Party</strong><p>Head to Lounge 201 (201 Massachusetts Avenue NE) Sunday for a <a href="http://madmens5finale.eventbrite.com/" target="_blank" title="Opens in a new window">Mad Men Season Five Finale Watch Party</a>, complete with 60s costume contest, Mad Men trivia, and retro food and drink. 8:00-11:00 p.m. $10 general admission, $20 admission and two hour open bar.</p>',
-                            'icon': 'theatre-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.003168, 38.894651]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Big Backyard Beach Bash and Wine Fest</strong><p>EatBar (2761 Washington Boulevard Arlington VA) is throwing a <a href="http://tallulaeatbar.ticketleap.com/2012beachblanket/" target="_blank" title="Opens in a new window">Big Backyard Beach Bash and Wine Fest</a> on Saturday, serving up conch fritters, fish tacos and crab sliders, and Red Apron hot dogs. 12:00-3:00 p.m. $25.grill hot dogs.</p>',
-                            'icon': 'bar-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.090372, 38.881189]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Ballston Arts & Crafts Market</strong><p>The <a href="http://ballstonarts-craftsmarket.blogspot.com/" target="_blank" title="Opens in a new window">Ballston Arts & Crafts Market</a> sets up shop next to the Ballston metro this Saturday for the first of five dates this summer. Nearly 35 artists and crafters will be on hand selling their wares. 10:00-4:00 p.m.</p>',
-                            'icon': 'art-gallery-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.111561, 38.882342]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Seersucker Bike Ride and Social</strong><p>Feeling dandy? Get fancy, grab your bike, and take part in this year\'s <a href="http://dandiesandquaintrelles.com/2012/04/the-seersucker-social-is-set-for-june-9th-save-the-date-and-start-planning-your-look/" target="_blank" title="Opens in a new window">Seersucker Social</a> bike ride from Dandies and Quaintrelles. After the ride enjoy a lawn party at Hillwood with jazz, cocktails, paper hat-making, and more. 11:00-7:00 p.m.</p>',
-                            'icon': 'bicycle-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.052477, 38.943951]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Capital Pride Parade</strong><p>The annual <a href="http://www.capitalpride.org/parade" target="_blank" title="Opens in a new window">Capital Pride Parade</a> makes its way through Dupont this Saturday. 4:30 p.m. Free.</p>',
-                            'icon': 'rocket-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.043444, 38.909664]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Muhsinah</strong><p>Jazz-influenced hip hop artist <a href="http://www.muhsinah.com" target="_blank" title="Opens in a new window">Muhsinah</a> plays the <a href="http://www.blackcatdc.com">Black Cat</a> (1811 14th Street NW) tonight with <a href="http://www.exitclov.com" target="_blank" title="Opens in a new window">Exit Clov</a> and <a href="http://godsilla.bandcamp.com" target="_blank" title="Opens in a new window">Gods’illa</a>. 9:00 p.m. $12.</p>',
-                            'icon': 'music-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.031706, 38.914581]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>A Little Night Music</strong><p>The Arlington Players\' production of Stephen Sondheim\'s  <a href="http://www.thearlingtonplayers.org/drupal-6.20/node/4661/show" target="_blank" title="Opens in a new window"><em>A Little Night Music</em></a> comes to the Kogod Cradle at The Mead Center for American Theater (1101 6th Street SW) this weekend and next. 8:00 p.m.</p>',
-                            'icon': 'music-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.020945, 38.878241]
-                        }
-                    },
-                    {
-                        'type': 'Feature',
-                        'properties': {
-                            'description':
-                                '<strong>Truckeroo</strong><p><a href="http://www.truckeroodc.com/www/" target="_blank">Truckeroo</a> brings dozens of food trucks, live music, and games to half and M Street SE (across from Navy Yard Metro Station) today from 11:00 a.m. to 11:00 p.m.</p>',
-                            'icon': 'music-15'
-                        },
-                        'geometry': {
-                            'type': 'Point',
-                            'coordinates': [-77.007481, 38.876516]
-                        }
-                    }
-                ]
-            }
             console.log(data)
-            console.log(test)
 
-
-            map.addSource('places', {
+            map.addSource('crime', {
                 'type': 'geojson',
                 'data': data
 
             })
 
             map.addLayer({
-                'id': 'places',
-                'type': 'circle',
-                'source': 'places',
-                'paint': {
-                    'circle-radius': 6,
-                    'circle-color': '#B42222'
-                }
+                'id': 'crime',
+                'type': 'heatmap',
+                'source': 'crime',
+
+                paint: {
+      // increase weight as diameter breast height increases
+      'heatmap-weight': {
+        property: 'dbh',
+        type: 'exponential',
+        stops: [
+          [1, 0],
+          [62, 1]
+        ]
+      },
+      // increase intensity as zoom level increases
+      'heatmap-intensity': {
+        stops: [
+          [11, 1],
+          [15, 3]
+        ]
+      },
+      // assign color values be applied to points depending on their density
+      'heatmap-color': [
+        'interpolate',
+        ['linear'],
+        ['heatmap-density'],
+        0,
+        'rgba(236,222,239,0)',
+        0.4,
+        'green',
+        0.6,
+        'yellow',
+        0.8,
+        'rgb(235, 102, 49)',
+        1,
+        'rgb(235, 49, 49)'
+      ],
+      // increase radius as zoom increases
+      'heatmap-radius': 8,
+      // decrease opacity to transition into the circle layer
+      'heatmap-opacity': {
+        default: 1,
+        stops: [
+          [14, 1],
+          [15, 0]
+        ]
+      }
+    }
+
+
+
+
             });
 
         })
@@ -219,9 +180,14 @@ export default {
     align-items: center;
 }
 
-.map-container {
+.map-box {
     width: 1000px;
     height: 500px;
+}
+
+.map-container {
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -257,4 +223,35 @@ export default {
 .map-key .k.petty {
     background-color: rgb(126, 214, 126);
 }
+
+
+.month-selector {
+    font-size: 18px;
+    display: flex;
+    margin-top: 20px;
+    font-weight: 600;
+    justify-content: space-between;
+}
+.month-selector > div {
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 3px solid transparent;
+    display: flex;
+    justify-content: center;
+}
+
+.month-selector:last-child {
+    border-right: 3px solid transparent;
+}
+
+.month-selector > div:hover,
+.month-selector > div.selected
+ {
+    border: 3px solid white;
+    background-color: rgb(255, 255, 255, 0.3);
+}
+
 </style>
