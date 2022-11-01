@@ -91,19 +91,19 @@ export default {
             this.global_map.setFilter('crime', this.map_filter());
             this.global_map.setFilter('crime_point', this.map_filter());
         },
-        /*
+
         map_filter() {
             var filter = [
             'all',
-            ['>=', 'Max Temp', this.min_value],
-            ['<=', 'Max Temp', this.max_value]
+            ['>=', 'Max Temp', Number(this.min_value)],
+            ['<=', 'Max Temp', Number(this.max_value)]
             ]
             if (this.month != 'all') {
                 filter.push(['==', 'Month', String(Number(this.month))])
             }
             return filter
         }
-        */
+
     },
     data() {
         return {
@@ -113,12 +113,7 @@ export default {
             max_value: 0
         }
     },
-    watch: {
-        max_value: function() {
-            this.global_map.setFilter('crime_point', ['>=', 'Max Temp', '-50'])
-        }
-    },
-    /*
+
     watch: {
         min_value: function () {
             this.global_map.setFilter('crime', this.map_filter());
@@ -129,7 +124,7 @@ export default {
             this.global_map.setFilter('crime_point', this.map_filter());
         }
     },
-    */
+
     mounted() {
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWNvbW1ldCIsImEiOiJja3V0YXpmMzgwc3J1MnJueTNrazhhejEyIn0.KkudRz1R4_glQLTiEKtKeQ';
         const map = new mapboxgl.Map({

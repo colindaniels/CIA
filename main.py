@@ -55,6 +55,7 @@ with open('assault.csv', newline='') as file:
             'type': 'Feature',
             'properties': {
                 'Date': row['Date'],
+                'Month': row['Month'],
                 'Block': row['Block'],
                 'Description': row['Description'],
                 'Location': row['Location Description'],
