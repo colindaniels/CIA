@@ -20,22 +20,26 @@
         -->
         <div class="map-box">
             <div id="map" class="map-container">
-        </div>
-        <div class="month-selector">
-            <div @click="clickMonth('all')" :class="{ selected: selected == 'all' }">ALL</div>
-            <div @click="clickMonth('01')" :class="{ selected: selected == '01' }">Jan</div>
-            <div @click="clickMonth('02')" :class="{ selected: selected == '02' }">Feb</div>
-            <div @click="clickMonth('03')" :class="{ selected: selected == '03' }">Mar</div>
-            <div @click="clickMonth('04')" :class="{ selected: selected == '04' }">Apr</div>
-            <div @click="clickMonth('05')" :class="{ selected: selected == '05' }">May</div>
-            <div @click="clickMonth('06')" :class="{ selected: selected == '06' }">Jun</div>
-            <div @click="clickMonth('07')" :class="{ selected: selected == '07' }">Jul</div>
-            <div @click="clickMonth('08')" :class="{ selected: selected == '08' }">Aug</div>
-            <div @click="clickMonth('09')" :class="{ selected: selected == '09' }">Sep</div>
-            <div @click="clickMonth('10')" :class="{ selected: selected == '10' }">Oct</div>
-            <div @click="clickMonth('11')" :class="{ selected: selected == '11' }">Nov</div>
-            <div @click="clickMonth('12')" :class="{ selected: selected == '12' }">Dec</div>
-        </div>
+            </div>
+            <div>
+                <div class="month-box">Month</div>
+                <div class="month-selector">
+                    <div @click="clickMonth('all')" :class="{ selected: selected == 'all' }">ALL</div>
+                    <div @click="clickMonth('01')" :class="{ selected: selected == '01' }">Jan</div>
+                    <div @click="clickMonth('02')" :class="{ selected: selected == '02' }">Feb</div>
+                    <div @click="clickMonth('03')" :class="{ selected: selected == '03' }">Mar</div>
+                    <div @click="clickMonth('04')" :class="{ selected: selected == '04' }">Apr</div>
+                    <div @click="clickMonth('05')" :class="{ selected: selected == '05' }">May</div>
+                    <div @click="clickMonth('06')" :class="{ selected: selected == '06' }">Jun</div>
+                    <div @click="clickMonth('07')" :class="{ selected: selected == '07' }">Jul</div>
+                    <div @click="clickMonth('08')" :class="{ selected: selected == '08' }">Aug</div>
+                    <div @click="clickMonth('09')" :class="{ selected: selected == '09' }">Sep</div>
+                    <div @click="clickMonth('10')" :class="{ selected: selected == '10' }">Oct</div>
+                    <div @click="clickMonth('11')" :class="{ selected: selected == '11' }">Nov</div>
+                    <div @click="clickMonth('12')" :class="{ selected: selected == '12' }">Dec</div>
+                </div>
+            </div>
+
         </div>
 
 
@@ -65,18 +69,25 @@ import mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-gl');"
 
 
 
-
 export default {
     methods: {
         clickMonth(month) {
+            //const layer = document.getElementById('layer');
             this.selected = month
-            this.global_map.setFilter('crime', ['==', 'Month', String(Number(month))]);
+            if (month == 'all') {
+                this.global_map.setFilter('crime', ['!=', 'Month', '.....']);
+                this.global_map.setFilter('crime_point', ['!=', 'Month', '.....']);
+            }
+            else {
+                this.global_map.setFilter('crime', ['==', 'Month', String(Number(month))]);
+                this.global_map.setFilter('crime_point', ['==', 'Month', String(Number(month))]);
+            }
         }
     },
     data() {
         return {
             global_map: "",
-            selected: '01'
+            selected: 'all'
         }
     },
     mounted() {
@@ -109,56 +120,106 @@ export default {
                 'source': 'crime',
 
                 paint: {
-      // increase weight as diameter breast height increases
-      'heatmap-weight': {
-        property: 'dbh',
-        type: 'exponential',
-        stops: [
-          [1, 0],
-          [62, 1]
-        ]
-      },
-      // increase intensity as zoom level increases
-      'heatmap-intensity': {
-        stops: [
-          [11, 1],
-          [15, 3]
-        ]
-      },
-      // assign color values be applied to points depending on their density
-      'heatmap-color': [
-        'interpolate',
-        ['linear'],
-        ['heatmap-density'],
-        0,
-        'rgba(236,222,239,0)',
-        0.4,
-        'green',
-        0.6,
-        'yellow',
-        0.8,
-        'rgb(235, 102, 49)',
-        1,
-        'rgb(235, 49, 49)'
-      ],
-      // increase radius as zoom increases
-      'heatmap-radius': 8,
-      // decrease opacity to transition into the circle layer
-      'heatmap-opacity': {
-        default: 1,
-        stops: [
-          [14, 1],
-          [15, 0]
-        ]
-      }
-    }
+                    // increase weight as diameter breast height increases
+                    'heatmap-weight': {
+                        property: 'dbh',
+                        type: 'exponential',
+                        stops: [
+                            [1, 0],
+                            [62, 1]
+                        ]
+                    },
+                    // increase intensity as zoom level increases
+                    'heatmap-intensity': {
+                        stops: [
+                            [11, 1],
+                            [15, 3]
+                        ]
+                    },
+                    // assign color values be applied to points depending on their density
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0,
+                        'rgba(236,222,239,0)',
+                        0.4,
+                        'green',
+                        0.6,
+                        'yellow',
+                        0.8,
+                        'rgb(235, 102, 49)',
+                        1,
+                        'rgb(235, 49, 49)'
+                    ],
+                    // increase radius as zoom increases
+                    'heatmap-radius': 8,
+                    // decrease opacity to transition into the circle layer
+                    'heatmap-opacity': {
+                        default: 1,
+                        stops: [
+                            [14, 1],
+                            [15, 0]
+                        ]
+                    },
+                }
 
 
 
 
             });
+            map.addLayer({
+                'id': 'crime_point',
+                'type': 'circle',
+                'source': 'crime',
+                'minzoom': 14,
+                paint: {
+                    'circle-color': 'rgb(111, 164, 255)',
+                    'circle-stroke-color': 'white',
+                    'circle-radius': {
+                        'base': 1.75,
+                        'stops': [
+                            [15, 10],
+                            [22, 180]
+                        ]
+                    },
+                    'circle-stroke-width': 2,
+                    'circle-opacity': {
+                        'stops': [
+                            [14, 0],
+                            [15, 1]
+                        ]
+                    }
+                }
+            },
+            'waterway-label'
+            )
+
+
+            map.on('click', 'crime_point', (event) => {
+                new mapboxgl.Popup()
+                .setLngLat(event.features[0].geometry.coordinates)
+                .setHTML(`
+                <div class="c-pop">
+                    <div>Date: <span>${event.features[0].properties.Date}</span></div>
+                    </div>Block: <span>${event.features[0].properties.Block}</span></div>
+                    <div>Description: <span>${event.features[0].properties.Description}</span></div>
+                    <div>Date: <span>${event.features[0].properties.Date}</span></div>
+                    <div>Location: <span>${event.features[0].properties['Location Description']}</span></div>
+                    <div>Arrest?: <span>${event.features[0].properties.Arrest}</span></div>
+                    <div>Domestic?: <span>${event.features[0].properties.Domestic}</span></div>
+                    <div>Clouds: <span>${event.features[0].properties.Clouds}%</span></div>
+                    <div>Max Temp: <span>${event.features[0].properties['Max Temp']} C</span></div>
+                    <div>Min Temp: <span>${event.features[0].properties['Min Temp']} C</span></div>
+                    <div>Wind Speed: <span>${event.features[0].properties['Max Wind Speed']} MPH</span></div>
+                    <div>Precipitation: <span>${event.features[0].properties.Precipitation}%</span></div>  
+                </div>
+                `)
+                .addTo(map)
+            })
 
         })
+
 
         // remove watermarks
         document.querySelector('.mapboxgl-ctrl-bottom-left').remove()
@@ -170,6 +231,23 @@ export default {
 
 
 </script>
+
+<style>
+.mapboxgl-popup-content {
+    color: black;
+}
+.mapboxgl-popup-content span {
+    font-weight: 700;
+    color: black;
+}
+
+.mapboxgl-popup-content .c-pop {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+</style>
 
 <style scoped>
 .container {
@@ -224,15 +302,22 @@ export default {
     background-color: rgb(126, 214, 126);
 }
 
+.month-box {
+    margin-top: 20px;
+    font-size: 20px;
+    color: white;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
 
 .month-selector {
     font-size: 18px;
     display: flex;
-    margin-top: 20px;
     font-weight: 600;
     justify-content: space-between;
 }
-.month-selector > div {
+
+.month-selector>div {
     position: relative;
     cursor: pointer;
     width: 100%;
@@ -247,11 +332,14 @@ export default {
     border-right: 3px solid transparent;
 }
 
-.month-selector > div:hover,
-.month-selector > div.selected
- {
+.month-selector>div:hover,
+.month-selector>div.selected {
     border: 3px solid white;
     background-color: rgb(255, 255, 255, 0.3);
+}
+
+.mapboxgl-popup {
+    color: black !important;
 }
 
 </style>
