@@ -1,3 +1,6 @@
+---
+---
+---
 
 ```{r}
 library(tidyverse)
@@ -21,6 +24,15 @@ library(openintro)
 library(gridExtra)
 ```
 ```{r}
+library(ggforce)
+theme_set(theme_bw(16))
+```
+
+```{r}
+library(zoom)
+```
+
+```{r}
 library("tmap")
 library("tmaptools")
 library("sf")
@@ -43,13 +55,6 @@ ChicagoCrime = ChicagoCrime %>% separate(year,c("year", "time"), sep = " ")
 ```
 
 ```{r}
-ChicagoTheft <- ChicagoCrime %>% 
-  filter(Primary.Type %in% c("THEFT"))
-
-head(ChicagoTheft)
-```
-
-```{r}
 ChicagoAssault <- ChicagoCrime %>% 
   filter(Primary.Type %in% c("ASSAULT"))
 
@@ -63,14 +68,47 @@ ChicagoAHT <- ChicagoCrime %>%
 head(ChicagoAHT)
 ```
 
-
 ```{r}
 ggplot(data = ChicagoAHT, mapping = aes(x = month, 
                                          fill = Primary.Type)) +
     geom_bar(position = "dodge") +
-  ggtitle("Frequency of Assault, Homicide, and Theft By Month") + 
+  ggtitle("Amount of Assault, Homicide, and Theft By Month") + 
   xlab("Month") + 
+  ylab("# of Crimes") 
+```
+
+```{r}
+library("readxl")
+
+ChicagoAslt_Wth = read.csv("assault.csv")
+head(ChicagoAslt_Wth)
+```
+
+```{r}
+ggplot(data=ChicagoAslt_Wth, aes(x=Max.Temp)) + 
+  geom_density(alpha=0.2, color= "lightblue", fill="lightblue") + 
+  ggtitle("Frequency of Assault Crimes Based on Maximum Temperature") +
+  xlab("Max Temp (C)") + 
   ylab("Frequency") 
 ```
 
+```{r}
+ggplot(data=ChicagoAslt_Wth, aes(x=Precipitation)) + 
+  geom_density(alpha=.2, color="green", fill="green")+ 
+  ggtitle("Frequency of Assault Crimes Based on Precipitation") +
+  xlab("Accumulated Precipation (mm)") + 
+  ylab("Frequency")
+```
 
+
+```{r}
+ChicagoAslt_Wth$Precipitation1 <- as.factor(ifelse(ChicagoAslt_Wth$Precipitation > 2.7, 'yes', 'no'))
+```
+
+```{r}
+ggplot(data=ChicagoAslt_Wth, aes(x=Precipitation1)) + 
+  geom_bar(fill="lightgreen",color="lightgreen")  + 
+  ggtitle("Amount of Assault Crimes when Precipation is Higher than Average") + 
+  xlab("Precipation Higher Than Average") + 
+  ylab("# of Assault Crimes") 
+```
