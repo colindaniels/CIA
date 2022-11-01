@@ -8,7 +8,7 @@
                     By: Colin, Irene, and Andrea
                 </div>
                 <div class="rel">
-                    <router-link to="/slides?slide=1" class="neon-button">START</router-link>
+                    <router-link to="/slides?slide=0" class="neon-button">START</router-link>
                 </div>
             </div>
         </div>
