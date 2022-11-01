@@ -31,6 +31,12 @@ assult_df = df.loc[df['Primary Type'] == 'ASSAULT']
 
 # remove no location data rows
 assult_df = assult_df[assult_df['Longitude'].notna()]
+
+# to float
+assult_df['Max Temp'] = assult_df['Max Temp']
+
+print(assult_df['Max Temp'])
+
 #print(assult_df.count())
 
 assult_df.to_csv('assault.csv')
@@ -47,7 +53,19 @@ with open('assault.csv', newline='') as file:
     for row in reader:
         geojson['features'].append({
             'type': 'Feature',
-            'properties': row,
+            'properties': {
+                'Date': row['Date'],
+                'Block': row['Block'],
+                'Description': row['Description'],
+                'Location': row['Location Description'],
+                'Arrest?': row['Arrest'],
+                'Domestic?': row['Domestic'],
+                'Clouds': row['Clouds'],
+                'Max Temp': float(row['Max Temp']),
+                'Min Temp': float(row['Min Temp']),
+                'Wind Speed': row['Max Wind Speed'],
+                'Precipitation': row['Precipitation']
+            },
             'geometry': {
                 'type': 'Point',
                 'coordinates': [float(row['Longitude']), float(row['Latitude'])]

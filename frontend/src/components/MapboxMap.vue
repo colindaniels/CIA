@@ -18,29 +18,43 @@
        
         </div>
         -->
-        <div class="map-box">
-            <div id="map" class="map-container">
+        <div class="horz">
+            <div class="weather-slider">
+                <label>Min Temp</label>
+                <input type="range" v-model="min_value" min="-20.0" max="45.0">
+                <div class="number">{{ min_value }}°C</div>
             </div>
-            <div>
-                <div class="month-box">Month</div>
-                <div class="month-selector">
-                    <div @click="clickMonth('all')" :class="{ selected: selected == 'all' }">ALL</div>
-                    <div @click="clickMonth('01')" :class="{ selected: selected == '01' }">Jan</div>
-                    <div @click="clickMonth('02')" :class="{ selected: selected == '02' }">Feb</div>
-                    <div @click="clickMonth('03')" :class="{ selected: selected == '03' }">Mar</div>
-                    <div @click="clickMonth('04')" :class="{ selected: selected == '04' }">Apr</div>
-                    <div @click="clickMonth('05')" :class="{ selected: selected == '05' }">May</div>
-                    <div @click="clickMonth('06')" :class="{ selected: selected == '06' }">Jun</div>
-                    <div @click="clickMonth('07')" :class="{ selected: selected == '07' }">Jul</div>
-                    <div @click="clickMonth('08')" :class="{ selected: selected == '08' }">Aug</div>
-                    <div @click="clickMonth('09')" :class="{ selected: selected == '09' }">Sep</div>
-                    <div @click="clickMonth('10')" :class="{ selected: selected == '10' }">Oct</div>
-                    <div @click="clickMonth('11')" :class="{ selected: selected == '11' }">Nov</div>
-                    <div @click="clickMonth('12')" :class="{ selected: selected == '12' }">Dec</div>
+            <div class="weather-slider">
+                <label>Max Temp</label>
+                <input type="range" v-model="max_value" min="-20.0" max="45.0">
+                <div class="number">{{ max_value }}°C</div>
+            </div>
+            <div class="map-box">
+                <div class="head">Assult Crime In Chicago Based on Month and Tempreture</div>
+                <div id="map" class="map-container">
                 </div>
-            </div>
+                <div>
+                    <div class="month-box">Month</div>
+                    <div class="month-selector">
+                        <div @click="clickMonth('all')" :class="{ selected: month == 'all' }">ALL</div>
+                        <div @click="clickMonth('01')" :class="{ selected: month == '01' }">Jan</div>
+                        <div @click="clickMonth('02')" :class="{ selected: month == '02' }">Feb</div>
+                        <div @click="clickMonth('03')" :class="{ selected: month == '03' }">Mar</div>
+                        <div @click="clickMonth('04')" :class="{ selected: month == '04' }">Apr</div>
+                        <div @click="clickMonth('05')" :class="{ selected: month == '05' }">May</div>
+                        <div @click="clickMonth('06')" :class="{ selected: month == '06' }">Jun</div>
+                        <div @click="clickMonth('07')" :class="{ selected: month == '07' }">Jul</div>
+                        <div @click="clickMonth('08')" :class="{ selected: month == '08' }">Aug</div>
+                        <div @click="clickMonth('09')" :class="{ selected: month == '09' }">Sep</div>
+                        <div @click="clickMonth('10')" :class="{ selected: month == '10' }">Oct</div>
+                        <div @click="clickMonth('11')" :class="{ selected: month == '11' }">Nov</div>
+                        <div @click="clickMonth('12')" :class="{ selected: month == '12' }">Dec</div>
+                    </div>
+                </div>
 
+            </div>
         </div>
+
 
 
     </div>
@@ -73,23 +87,49 @@ export default {
     methods: {
         clickMonth(month) {
             //const layer = document.getElementById('layer');
-            this.selected = month
-            if (month == 'all') {
-                this.global_map.setFilter('crime', ['!=', 'Month', '.....']);
-                this.global_map.setFilter('crime_point', ['!=', 'Month', '.....']);
+            this.month = month
+            this.global_map.setFilter('crime', this.map_filter());
+            this.global_map.setFilter('crime_point', this.map_filter());
+        },
+        /*
+        map_filter() {
+            var filter = [
+            'all',
+            ['>=', 'Max Temp', this.min_value],
+            ['<=', 'Max Temp', this.max_value]
+            ]
+            if (this.month != 'all') {
+                filter.push(['==', 'Month', String(Number(this.month))])
             }
-            else {
-                this.global_map.setFilter('crime', ['==', 'Month', String(Number(month))]);
-                this.global_map.setFilter('crime_point', ['==', 'Month', String(Number(month))]);
-            }
+            return filter
         }
+        */
     },
     data() {
         return {
             global_map: "",
-            selected: 'all'
+            month: 'all',
+            min_value: 0,
+            max_value: 0
         }
     },
+    watch: {
+        max_value: function() {
+            this.global_map.setFilter('crime_point', ['>=', 'Max Temp', '-50'])
+        }
+    },
+    /*
+    watch: {
+        min_value: function () {
+            this.global_map.setFilter('crime', this.map_filter());
+            this.global_map.setFilter('crime_point', this.map_filter());
+        },
+        max_value: function () {
+            this.global_map.setFilter('crime', this.map_filter());
+            this.global_map.setFilter('crime_point', this.map_filter());
+        }
+    },
+    */
     mounted() {
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWNvbW1ldCIsImEiOiJja3V0YXpmMzgwc3J1MnJueTNrazhhejEyIn0.KkudRz1R4_glQLTiEKtKeQ';
         const map = new mapboxgl.Map({
@@ -153,7 +193,7 @@ export default {
                         'rgb(235, 49, 49)'
                     ],
                     // increase radius as zoom increases
-                    'heatmap-radius': 8,
+                    'heatmap-radius': 10,
                     // decrease opacity to transition into the circle layer
                     'heatmap-opacity': {
                         default: 1,
@@ -192,14 +232,14 @@ export default {
                     }
                 }
             },
-            'waterway-label'
+                'waterway-label'
             )
 
 
             map.on('click', 'crime_point', (event) => {
                 new mapboxgl.Popup()
-                .setLngLat(event.features[0].geometry.coordinates)
-                .setHTML(`
+                    .setLngLat(event.features[0].geometry.coordinates)
+                    .setHTML(`
                 <div class="c-pop">
                     <div>Date: <span>${event.features[0].properties.Date}</span></div>
                     </div>Block: <span>${event.features[0].properties.Block}</span></div>
@@ -215,7 +255,7 @@ export default {
                     <div>Precipitation: <span>${event.features[0].properties.Precipitation}%</span></div>  
                 </div>
                 `)
-                .addTo(map)
+                    .addTo(map)
             })
 
         })
@@ -236,6 +276,7 @@ export default {
 .mapboxgl-popup-content {
     color: black;
 }
+
 .mapboxgl-popup-content span {
     font-weight: 700;
     color: black;
@@ -246,7 +287,6 @@ export default {
     flex-direction: column;
     gap: 5px;
 }
-
 </style>
 
 <style scoped>
@@ -259,14 +299,14 @@ export default {
 }
 
 .map-box {
-    width: 1000px;
-    height: 500px;
+    width: 90%;
 }
 
 .map-container {
     width: 100%;
-    height: 100%;
+    height: 500px;
 }
+
 
 
 .map-key {
@@ -342,4 +382,98 @@ export default {
     color: black !important;
 }
 
+.weather-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 10%;
+    position: relative;
+
+}
+
+.weather-slider .number {
+    background-color: white;
+    color: var(--bg-color);
+    font-size: 20px;
+    font-size: 900;
+    width: 80%;
+    border-radius: 5px;
+    position: relative;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+}
+
+.weather-slider input[type="range"] {
+    -webkit-appearance: none;
+    height: 5px;
+    position: relative;
+    background-color: white;
+    border-radius: 5px;
+    outline: none;
+    transform: rotate(-90deg);
+    width: 350px;
+}
+
+.weather-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: var(--primary-color);
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.weather-slider input[type="range"]::-webkit-slider-thumb:hover {
+    background-color: var(--primary-color);
+    filter: brightness(80%);
+}
+
+
+.number::before {
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 0;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom: 10px solid white;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+}
+
+
+.horz {
+    display: flex;
+    width: 80%;
+    gap: 30px;
+}
+
+.weather-slider label {
+    text-align: center;
+    position: absolute;
+    top: calc(69.5px + 5%);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.weather-slider .number {
+    bottom: calc(69.5px + 5%);
+}
+
+.head {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 54.5px;
+    /* keep to center */
+    margin-bottom: 15px;
+}
 </style>
