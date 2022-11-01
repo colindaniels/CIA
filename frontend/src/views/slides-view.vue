@@ -1,6 +1,7 @@
 <template>
     <div class="present-box">
         <div class="present">
+            <Slide0 v-if="active == 0"/>
             <Slide1 v-if="active == 1"/>
             <Slide2 v-if="active == 2"/>
             <Slide3 v-if="active == 3"/>
@@ -9,11 +10,15 @@
             <Slide6 v-if="active == 6"/>
             <Slide7 v-if="active == 7"/>
             <Slide8 v-if="active == 8"/>
+            <Slide9 v-if="active == 9"/>
+            <Slide10 v-if="active == 10"/>
+            <Slide11 v-if="active == 11"/>
+            <Slide12 v-if="active == 12"/>
         </div>
         <div class="btns">
-            <router-link to="#" @click="back" class="neon-button">Back</router-link>
-            <router-link to="#" @click="next" class="neon-button">Next</router-link>
-            <router-link :to="`/map?storage=${active}`" class="neon-button tomap">Map</router-link>
+            <router-link v-if="active > 0" to="#" @click="back" class="neon-button">Back</router-link>
+            <router-link v-if="active < total_slides" to="#" @click="next" class="neon-button">Next</router-link>
+            <router-link :to="`/map?storage=${active}`" class="neon-button">Map</router-link>
         </div>
 
 
@@ -24,6 +29,7 @@
 </template>
 
 <script>
+import Slide0 from '@/components/Slide-0.vue'
 import Slide1 from '@/components/Slide-1.vue'
 import Slide2 from '@/components/Slide-2.vue'
 import Slide3 from '@/components/Slide-3.vue'
@@ -32,8 +38,13 @@ import Slide5 from '@/components/Slide-5.vue'
 import Slide6 from '@/components/Slide-6.vue'
 import Slide7 from '@/components/Slide-7.vue'
 import Slide8 from '@/components/Slide-8.vue'
+import Slide9 from '@/components/Slide-9.vue'
+import Slide10 from '@/components/Slide-10.vue'
+import Slide11 from '@/components/Slide-11.vue'
+import Slide12 from '@/components/Slide-12.vue'
 export default {
     components: {
+        Slide0,
         Slide1,
         Slide2,
         Slide3,
@@ -41,7 +52,11 @@ export default {
         Slide5,
         Slide6,
         Slide7,
-        Slide8
+        Slide8,
+        Slide9,
+        Slide10,
+        Slide11,
+        Slide12
     },
     methods: {
         back() {
@@ -58,7 +73,8 @@ export default {
     },
     data() {
         return {
-            active: Number(this.$route.query.slide)
+            active: Number(this.$route.query.slide),
+            total_slides: 12
         }
     }
 }
@@ -77,6 +93,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    max-width: 1500px;
 }
 
 .present {
@@ -149,12 +166,6 @@ export default {
 }
 .neon-button:hover::after {
   opacity: 1;
-}
-
-
-.tomap {
-    position: absolute;
-    right: 0;
 }
 
 </style>

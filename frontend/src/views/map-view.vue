@@ -2,7 +2,9 @@
     <div class="content">
         <MabboxMap/>
     </div>
-    <router-link :to="`/slides?slide=${active}`" class="neon-button">Slides</router-link>
+    <div class="btn-box">
+        <router-link :to="`/slides?slide=${active}`" class="neon-button">Slides</router-link>
+    </div>
 </template>
 
 <script>
@@ -80,4 +82,15 @@ export default {
 .neon-button:hover::after {
   opacity: 1;
 }
+
+.btn-box {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 14%;
+}
+
+
+
 </style>
