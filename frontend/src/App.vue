@@ -41,4 +41,57 @@ span {
   color: var(--primary-color);
 }
 
+h3 {
+  font-size: 35px;
+  color: var(--primary-color);
+  margin: 0;
+  margin-bottom: 25px;
+}
+h4 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  height: 100%;
+}
+
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  height: 100%;
+}
+
+.side {
+  display: flex;
+  height: 100%;
+  gap: 40px;
+}
+
+.img-box {
+  max-height: 80%;
+  max-width: 100%;
+}
+
+.img-box img {
+  width: 100%;
+  height: 100%;
+  max-height: 500px;
+}
+
+.img-box.long img {
+  width: unset;
+}
+
+.img-box.medium {
+  width: 50%;
+}
+
+
+
 </style>

@@ -12,7 +12,7 @@
                 <div class="number">{{ max_value }}°C</div>
             </div>
             <div class="map-box">
-                <div class="head">Assult Crime In Chicago Based on Month and Tempreture</div>
+                <div class="head">Assault Crime In Chicago Based on Month and Temperature</div>
                 <div id="map" class="map-container">
                     <div class="count">Count: {{ assault_count }}</div>
                 </div>
@@ -49,6 +49,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import axios from 'axios';
 var data = null;
+var map_data = null;
+
+// requests
 axios({
     url: 'https://raw.githubusercontent.com/colindaniels/CIA/main/assaults.geojson',
     method: 'GET',
@@ -59,6 +62,19 @@ axios({
 }).then((res) => {
     if (res.status == 200 && res.data) {
         data = res.data
+    }
+})
+
+axios({
+    url: 'https://raw.githubusercontent.com/colindaniels/CIA/main/chicago_map.geojson',
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+    }
+}).then((res) => {
+    if (res.status == 200 && res.data) {
+        map_data = res.data
     }
 })
 
@@ -78,9 +94,9 @@ export default {
 
         map_filter() {
             var filter = [
-            'all',
-            ['>=', 'Max Temp', Number(this.min_value)],
-            ['<=', 'Max Temp', Number(this.max_value)]
+                'all',
+                ['>=', 'Max Temp', Number(this.min_value)],
+                ['<=', 'Max Temp', Number(this.max_value)]
             ]
             if (this.month != 'all') {
                 filter.push(['==', 'Month', String(Number(this.month))])
@@ -107,7 +123,7 @@ export default {
             this.global_map.setFilter('crime', this.map_filter());
             this.global_map.setFilter('crime_point', this.map_filter());
 
-            
+
         },
         max_value: function () {
             this.global_map.setFilter('crime', this.map_filter());
@@ -116,7 +132,7 @@ export default {
     },
 
     mounted() {
-        
+
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWNvbW1ldCIsImEiOiJja3V0YXpmMzgwc3J1MnJueTNrazhhejEyIn0.KkudRz1R4_glQLTiEKtKeQ';
         const map = new mapboxgl.Map({
             container: 'map', // container ID
@@ -135,10 +151,17 @@ export default {
             this.assault_count = data.features.length
 
             console.log(data)
+            console.log(map_data)
 
             map.addSource('crime', {
                 'type': 'geojson',
                 'data': data
+
+            })
+
+            map.addSource('borders', {
+                'type': 'geojson',
+                'data': map_data
 
             })
 
@@ -218,6 +241,22 @@ export default {
                             [15, 1]
                         ]
                     }
+                }
+            },
+                'waterway-label'
+            )
+
+
+
+
+            map.addLayer({
+                'id': 'borders',
+                'source': 'borders',
+                "type": "fill",
+                "paint": {
+                    "fill-color": "rgb(128, 128, 128)",
+                    'fill-outline-color': 'red',
+                    'fill-opacity': 0.5
                 }
             },
                 'waterway-label'
@@ -443,5 +482,4 @@ export default {
     align-items: center;
     padding: 0 5px;
 }
-
 </style>

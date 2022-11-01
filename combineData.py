@@ -11,11 +11,13 @@ with open(filename, 'r') as file:
 weather_df = pd.DataFrame(json_data)
 weather_df.rename(columns={'datetime': 'Date'}, inplace=True)
 
+print(weather_df.head())
+
+
 crime_csv = 'chicago_crime.csv'
 
 crime_df = pd.read_csv(crime_csv)
 
-print(crime_df.head())
 
 # include only date part of datetime
 crime_df['Date'] = crime_df['Date'].str.replace('/', '-').str.split(' ').str[0]
