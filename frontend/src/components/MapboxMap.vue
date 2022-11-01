@@ -1,23 +1,5 @@
 <template>
     <div class="container">
-        <!--
-        <div class="map-key">
-            
-            <div>
-                <div class="k assult"></div>
-                <div class="v"></div>
-            </div>
-            <div>
-                <div class="k battery"></div>
-                <div class="v"></div>
-            </div>
-            <div>
-                <div class="k petty"></div>
-                <div class="v"></div>
-            </div>
-       
-        </div>
-        -->
         <div class="horz">
             <div class="weather-slider">
                 <label>Min Temp</label>
@@ -32,6 +14,7 @@
             <div class="map-box">
                 <div class="head">Assult Crime In Chicago Based on Month and Tempreture</div>
                 <div id="map" class="map-container">
+                    <div class="count">Count: {{ assault_count }}</div>
                 </div>
                 <div>
                     <div class="month-box">Month</div>
@@ -90,6 +73,7 @@ export default {
             this.month = month
             this.global_map.setFilter('crime', this.map_filter());
             this.global_map.setFilter('crime_point', this.map_filter());
+            this.refreshCount()
         },
 
         map_filter() {
@@ -102,6 +86,9 @@ export default {
                 filter.push(['==', 'Month', String(Number(this.month))])
             }
             return filter
+        },
+        refreshCount() {
+            this.assault_count = this.global_map.queryRenderedFeatures().length
         }
 
     },
@@ -110,7 +97,8 @@ export default {
             global_map: "",
             month: 'all',
             min_value: -20,
-            max_value: 45
+            max_value: 45,
+            assault_count: 0
         }
     },
 
@@ -118,6 +106,8 @@ export default {
         min_value: function () {
             this.global_map.setFilter('crime', this.map_filter());
             this.global_map.setFilter('crime_point', this.map_filter());
+
+            
         },
         max_value: function () {
             this.global_map.setFilter('crime', this.map_filter());
@@ -126,6 +116,7 @@ export default {
     },
 
     mounted() {
+        
         mapboxgl.accessToken = 'pk.eyJ1IjoiZWNvbW1ldCIsImEiOiJja3V0YXpmMzgwc3J1MnJueTNrazhhejEyIn0.KkudRz1R4_glQLTiEKtKeQ';
         const map = new mapboxgl.Map({
             container: 'map', // container ID
@@ -140,6 +131,8 @@ export default {
         this.global_map = map
 
         map.on('load', () => {
+
+            this.assault_count = data.features.length
 
             console.log(data)
 
@@ -303,40 +296,6 @@ export default {
 }
 
 
-
-.map-key {
-    width: 200px;
-    border: 5px solid white;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-.map-key>div {
-    display: flex;
-}
-
-.map-key .k {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: 3px solid white;
-}
-
-.map-key .k.assult {
-    background-color: rgb(251, 172, 116);
-}
-
-.map-key .k.battery {
-    background-color: rgb(203, 203, 0);
-}
-
-.map-key .k.petty {
-    background-color: rgb(126, 214, 126);
-}
-
 .month-box {
     margin-top: 20px;
     font-size: 20px;
@@ -416,9 +375,8 @@ export default {
 .weather-slider input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     background-color: var(--primary-color);
-    height: 25px;
+    height: 40px;
     width: 25px;
-    border-radius: 50%;
     cursor: pointer;
 }
 
@@ -471,4 +429,19 @@ export default {
     /* keep to center */
     margin-bottom: 15px;
 }
+
+
+.count {
+    position: absolute;
+    z-index: 999;
+    right: 0;
+    background-color: rgb(0, 0, 0, 0.5);
+    width: 20%;
+    height: 40px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+}
+
 </style>
